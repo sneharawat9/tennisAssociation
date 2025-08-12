@@ -76,7 +76,7 @@
     <script>
       async function loadParticipants() {
         try {
-          const res = await fetch("http://localhost:5000/api/participants");
+          const res = await fetch("https://tennisassociation-backend.onrender.com/api/participants");
           const data = await res.json();
 
           const tbody = document.getElementById("participantTableBody");
