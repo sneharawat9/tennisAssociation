@@ -83,7 +83,7 @@
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       document.getElementById("daysLeft").innerText = diffDays;
 
-      fetch("http://localhost:5000/api/participants")
+      fetch("https://tennisassociation-backend.onrender.com/api/participants")
         .then((res) => res.json())
         .then((data) => {
           document.getElementById("totalTeams").innerText = data.length;
