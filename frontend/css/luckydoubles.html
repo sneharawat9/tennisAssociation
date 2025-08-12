@@ -82,7 +82,7 @@
 
     <script>
       async function loadLuckyPairs() {
-        const res = await fetch("http://localhost:5000/api/lucky-doubles");
+        const res = await fetch("https://tennisassociation-backend.onrender.com/api/lucky-doubles");
         const data = await res.json();
 
         const pairBody = document.getElementById("pairsTable");
