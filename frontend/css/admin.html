@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - Tennis Tournament</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        padding: 20px;
+        background-color: #f7f7f7;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        background: white;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #2c3e50;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      button {
+        padding: 6px 12px;
+        cursor: pointer;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+
+      button.unmark {
+        background-color: #e74c3c;
+      }
+
+      .status {
+        font-weight: bold;
+      }
+
+      .yes {
+        color: green;
+      }
+
+      .no {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Admin Dashboard</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Player 1</th>
+          <th>Player 2</th>
+          <th>Category</th>
+          <th>Eligible?</th>
+          <th>Mark/Unmark</th>
+        </tr>
+      </thead>
+      <tbody id="adminTable"></tbody>
+    </table>
+
+    <script>
+      async function fetchTeams() {
+        try {
+          const res = await fetch("http://localhost:5000/api/participants");
+          const data = await res.json();
+
+          console.log("Fetched data:", data); // ADD THIS
+
+          const tbody = document.getElementById("adminTable");
+          tbody.innerHTML = "";
+
+          data.forEach((team, i) => {
+            const row = document.createElement("tr");
+
+            const isLucky = team.luckyEligible;
+
+            row.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${team.player1.name} <br><small>${
+              team.player1.whatsapp
+            }</small></td>
+          <td>${team.player2.name} <br><small>${
+              team.player2.whatsapp
+            }</small></td>
+          <td>${team.category}</td>
+          <td class="status ${isLucky ? "yes" : "no"}">
+            ${isLucky ? "✅ Yes" : "❌ No"}
+          </td>
+          <td>
+            <button class="${isLucky ? "unmark" : ""}"
+              onclick="toggleLucky('${team._id}', ${!isLucky})">
+              ${isLucky ? "Unmark" : "Mark"}
+            </button>
+          </td>
+        `;
+
+            tbody.appendChild(row);
+          });
+        } catch (err) {
+          console.error("Fetch failed:", err);
+          alert("Failed to load teams.");
+        }
+      }
+
+      async function toggleLucky(id, newStatus) {
+        try {
+          console.log("Updating ID:", id, "to", newStatus);
+          await fetch(`http://localhost:5000/api/mark-lucky/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ luckyEligible: newStatus }),
+          });
+          fetchTeams();
+        } catch (err) {
+          console.error("Update failed:", err);
+          alert("Failed to update status.");
+        }
+      }
+
+      window.onload = fetchTeams;
+    </script>
+  </body>
+</html>
