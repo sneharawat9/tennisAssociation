@@ -85,7 +85,7 @@
     <script>
       async function fetchTeams() {
         try {
-          const res = await fetch("http://localhost:5000/api/participants");
+          const res = await fetch("https://tennisassociation-backend.onrender.com/api/participants");
           const data = await res.json();
 
           console.log("Fetched data:", data); // ADD THIS
@@ -129,7 +129,7 @@
       async function toggleLucky(id, newStatus) {
         try {
           console.log("Updating ID:", id, "to", newStatus);
-          await fetch(`http://localhost:5000/api/mark-lucky/${id}`, {
+          await fetch(`https://tennisassociation-backend.onrender.com/api/mark-lucky/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ luckyEligible: newStatus }),
