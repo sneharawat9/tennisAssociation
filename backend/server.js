@@ -2,7 +2,23 @@
 const cors = require("cors");
 require("dotenv").config({
   path: require("path").resolve(__dirname, "../.env"),
-}); // Load .env file
+});
+
+///////////////////////////////////////
+const cors = require("cors");
+app.use(cors({
+  origin: "*", // or your frontend domain
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type"
+}));
+/////////////////////////////////////
+
+
+
+
+
+
+// Load .env file
 console.log("MONGO_URI from .env:", process.env.MONGO_URI);
 
 const express = require("express");
